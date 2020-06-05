@@ -85,9 +85,13 @@ class Player(object):
     def _directory_setup(self):
         """Create directory for storing downloads"""
         time_now = str(int(time.time()))
-        self.directory = '/'.join(__file__.split('/')
-                                  [:-2]) + '/' + self.options.output + \
-            '/' + time_now
+        if self.options.output.startswith('/'):
+        	# We have been given an absolute path, RESPECT THAT!!!
+        	self.directory = os.path.join(self.options.output, time_now)
+        else:
+		    self.directory = '/'.join(__file__.split('/')
+		                              [:-2]) + '/' + self.options.output + \
+		        '/' + time_now
         self.create_directory()
 
     def _consumer(self):
@@ -176,6 +180,9 @@ class Player(object):
         except requests.exceptions.ConnectionError as exception:
             self.event('error', 'connection error: ' + str(exception))
             response = None  # Return a None value if connection has failed
+        except Exception as e:
+        	print("EXCEPTION: " + repr(e))
+        	response = None
         if not self.options.keep_alive:
             response.connection.close()
         return response
