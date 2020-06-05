@@ -7,5 +7,3 @@ progress==1.2
 pymediainfo==1.4.0
 pyzmq==14.3.1
 requests==2.2.1
-wsgiref==0.1.2
-
